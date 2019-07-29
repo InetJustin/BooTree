@@ -3480,8 +3480,8 @@ bt.grid.config = {
         },
 
         icons: {
-            asc: '▲',
-            desc: '▼'
+            asc: '?',
+            desc: '?'
         }
     },
 
@@ -11474,6 +11474,35 @@ bt.tree.plugins.checkboxes = {
             return result;
         },
 
+        /** Get ids of all unchecked nodes
+         * @method
+         * @return Array
+         * @example Base.Theme <!-- checkbox, tree -->
+         * <button id="btnGet" class="bt-button-md">Get Unchecked Nodes</button>
+         * <div id="tree"></div>
+         * <script>
+         *     var tree = $('#tree').tree({
+         *         dataSource: '/Locations/Get',
+         *         checkboxes: true
+         *     });
+         *     $('#btnGet').on('click', function() {
+         *         var result = tree.getUncheckedNodes();
+         *         alert(result.join());
+         *     });
+         * </script>
+         */
+        getUncheckedNodes: function () {
+            var result = [],
+                checkboxes = this.find('li [data-role="checkbox"] input[type="checkbox"]');
+            $.each(checkboxes, function () {
+                var checkbox = $(this);
+                if (checkbox.checkbox('state') === 'unchecked') {
+                    result.push(checkbox.closest('li').data('id'));
+                }
+            });
+            return result;
+        },
+
         /**
          * Check all tree nodes
          * @method
@@ -16945,18 +16974,3 @@ bt.slider.widget.constructor = bt.slider.widget;
         }
     };
 })(jQuery);
-
-var _gaq = _gaq || [];
-function loadtracking() {
-        window._gaq.push(['_setAccount', 'UA-117512685-2']);
-        window._gaq.push(['_trackPageview']);
-        (function() {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = 'https://www.googletagmanager.com/gtag/js?id=UA-117512685-2';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ga, s);
-        })();
-}
-loadtracking();

@@ -10074,7 +10074,13 @@ bt.tree.methods = {
             $node = $('<li data-id="' + nodeData.id + '" data-role="node" />').addClass(data.style.item),
             $wrapper = $('<div data-role="wrapper" />'),
             $expander = $('<span data-role="expander" data-mode="close"></span>').addClass(data.style.expander),
-            $display = $('<span data-role="display">' + nodeData.data[data.textField] + '</span>'),
+
+            $text = nodeData.data[data.textField];
+            if (typeof $tree.renderNode !== 'undefined') {
+                $text = $tree.renderNode(nodeData);
+            }
+
+            $display = $('<span data-role="display">' + $text + '</span>'),
             hasChildren = typeof (nodeData.data[data.hasChildrenField]) !== 'undefined' && nodeData.data[data.hasChildrenField].toString().toLowerCase() === 'true',
             disabled = typeof (nodeData.data[data.disabledField]) !== 'undefined' && nodeData.data[data.disabledField].toString().toLowerCase() === 'true';
 
@@ -10416,7 +10422,15 @@ bt.tree.methods = {
             $node = $tree.getNodeById(id),
             oldRecord = $tree.getDataById(id);
         oldRecord = newRecord;
-        $node.find('>[data-role="wrapper"]>[data-role="display"]').html(newRecord[data.textField]);
+
+        var nodeData = bt.tree.methods.getRecords($tree, [newRecord])[0];
+
+        $text = newRecord[data.textField];
+        if (typeof $tree.renderNode !== 'undefined') {
+            $text = $tree.renderNode(nodeData);
+        }
+
+        $node.find('>[data-role="wrapper"]>[data-role="display"]').html($text);
         bt.tree.events.nodeDataBound($tree, $node, id, newRecord);
         return $tree;
     },
